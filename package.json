@@ -1,15 +1,17 @@
-{
+
   "name": "maxibrasil-export-agent",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "start": "vite preview"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
   }
 }
