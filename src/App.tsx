@@ -386,20 +386,13 @@ useEffect(() => {
 const loadData = async () => {
 setIsLoadingInitial(true);
 try {
-const [leadsRes, sessionsRes] = await Promise.all([
-fetch('/api/leads'),
-fetch('/api/sessions')
-]);
+const storedLeads = localStorage.getItem('leads');
+const storedSessions = localStorage.getItem('sessions');
 
-if (leadsRes.ok) {
-const data = await leadsRes.json();
-if (Array.isArray(data)) setLeads(data);
-}
+if (storedLeads) setLeads(JSON.parse(storedLeads));
+if (storedSessions) setSessions(JSON.parse(storedSessions));
 
-if (sessionsRes.ok) {
-const data = await sessionsRes.json();
-if (Array.isArray(data)) setSessions(data);
-}
+
 } catch (error) {
 console.error("Error loading data:", error);
 } finally {
@@ -411,38 +404,15 @@ loadData();
 
 // Save leads to server
 const saveLeadsToServer = async (leadsToSave: Lead[]) => {
-if (isLoadingInitial) return;
-setIsSaving(true);
-try {
-const res = await fetch('/api/leads', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(leadsToSave),
-});
-if (!res.ok) throw new Error('Falha ao salvar leads');
-} catch (error) {
-console.error("Error saving leads:", error);
-alert("Erro ao salvar leads no servidor.");
-} finally {
-setIsSaving(false);
-}
+  localStorage.setItem('leads', JSON.stringify(leadsToSave));
 };
+
+
+
 
 const saveSessionsToServer = async (sessionsToSave: SearchSession[]) => {
-if (isLoadingInitial) return;
-try {
-const res = await fetch('/api/sessions', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(sessionsToSave),
-});
-if (!res.ok) throw new Error('Falha ao salvar sessões');
-} catch (error) {
-console.error("Error saving sessions:", error);
-alert("Erro ao salvar sessões no servidor.");
-}
+  localStorage.setItem('sessions', JSON.stringify(sessionsToSave));
 };
-
 const handleSearch = async () => {
 if (!searchQuery) return;
 setIsSearching(true);
